@@ -18,7 +18,7 @@ services:
     <<: *base-service
     image: grafana/promtail:latest
     volumes:
-      - ./locallogs:/var/locallogs
+      - ./karaf-logs:/var/karaf-logs
       - ./configs/promtail-config.yaml:/etc/promtail/promtail-config.yml
     command: -config.file=/etc/promtail/promtail-config.yml
 
