@@ -1,0 +1,54 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  - job_name: system
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: locallogs
+          __path__: /var/locallogs/*log
+    pipeline_stages:
+      - match:
+          selector: '{job="locallogs"}'
+          stages:
+            - multiline:
+                firstline: '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}'
+                max_lines: 128
+                max_wait_time: 3s
+            - regex:
+                expression: '^(?P<time>.*)\s+\|\s+(?P<log_level>\w+)\s+\|\s+(?P<thread_id>[^\|]+)\s+\|\s+(?P<action_type1>[^\|\s]+)\s+\|\s+(?P<component>[^\|]+)\s+\|\s+(?P<action_type2>[^\n]+)(?:\n(?P<msg>.*))?'
+            - timestamp:
+                format: 2006-01-02T15:04:05,000
+                source: time
+            - regex:
+                expression: '(?P<xml_status>[0-9]*)<\/status>'
+            - regex:
+                expression: 'ResponseCode:\s(?P<response_code>[0-9]*)'
+            - regex:
+                expression: '(?:<messageUUID>|SOAPJMS_HEADER_MessageUUID=|<transportUUID>|Receive message |Отправлен )(?P<message_uuid>[\w-]+)'
+            - regex:
+                expression: '(?:<destination>\s*<id>|DESTINATION_SYSTEM_UUID=|for\s|Destination=)(?P<destination>[\w-]+)'
+            - labels:
+                log_level:
+                thread_id:
+                action_type1:
+                component:
+                action_type2:
+                xml_status:
+                response_code:
+                message_uuid:
+                destination:
+            - labels:
+                log_level:
+                time:
+
+#promtail --dry-run --inspect --config.file=/etc/promtail/promtail-config.yml
