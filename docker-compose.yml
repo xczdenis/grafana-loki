@@ -5,22 +5,49 @@ x-base-service: &base-service
         - default
 
 services:
-  loki:
+  proxy:
     <<: *base-service
-    image: grafana/loki:latest
+    image: nginx:latest
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/nginx/templates:/etc/nginx/templates:ro
+    env_file: .env
+    environment:
+      GRAFANA_HOST: grafana
+      GRAFANA_PORT: 3000
+      LOKI_HOST: loki
+      LOKI_PORT: 3100
+      SUPERVISOR_HOST: localhost
+      SUPERVISOR_PORT: 9091
     ports:
-      - "3100:3100"
-    volumes:
-      - ./configs/loki-config.yaml:/etc/loki/local-config.yaml
-    command: -config.file=/etc/loki/local-config.yaml
+      - ${PROXY_LISTEN_PORT_GRAFANA}:${PROXY_LISTEN_PORT_GRAFANA}
+      - ${PROXY_LISTEN_PORT_LOKI}:${PROXY_LISTEN_PORT_LOKI}
+      - ${PROXY_LISTEN_PORT_SUPERVISOR}:${PROXY_LISTEN_PORT_SUPERVISOR}
+    depends_on:
+      grafana:
+        condition: service_started
+      loki:
+        condition: service_started
+    profiles:
+      - default
 
-  promtail:
+  proxy-grafana:
     <<: *base-service
-    image: grafana/promtail:latest
+    image: nginx:latest
     volumes:
-      - ./karaf-logs:/var/karaf-logs
-      - ./configs/promtail-config.yaml:/etc/promtail/promtail-config.yml
-    command: -config.file=/etc/promtail/promtail-config.yml
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/nginx/templates/grafana.conf.template:/etc/nginx/templates/site.conf.template:ro
+    env_file: .env
+    environment:
+      GRAFANA_HOST: grafana
+      GRAFANA_PORT: 3000
+    ports:
+      - ${PROXY_LISTEN_PORT_GRAFANA}:${PROXY_LISTEN_PORT_GRAFANA}
+    depends_on:
+      grafana:
+        condition: service_started
+    profiles:
+      - grafana
 
   grafana:
     <<: *base-service
@@ -48,5 +75,22 @@ services:
           editable: false
         EOF
         /run.sh
-    ports:
-      - "3000:3000"
+    profiles:
+      - default
+      - grafana
+
+  loki:
+    <<: *base-service
+    image: grafana/loki:latest
+    volumes:
+      - ./configs/loki-config.yaml:/etc/loki/local-config.yaml
+    command: -config.file=/etc/loki/local-config.yaml
+
+  promtail:
+    <<: *base-service
+    image: grafana/promtail:latest
+    volumes:
+      - ./karaf-logs:/var/karaf-logs
+      - ./configs/promtail-config.yaml:/etc/promtail/promtail-config.yml
+    command: -config.file=/etc/promtail/promtail-config.yml
+

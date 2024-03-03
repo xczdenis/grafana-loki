@@ -1,19 +1,5 @@
 DEFAULT_PROJECT_NAME=grafana-loki
 
-PREFIX_DEV=dev
-PREFIX_TEST=test
-PREFIX_PROD=prod
-
-CURRENT_ENVIRONMENT_PREFIX=PREFIX_DEV
-
-DOCKER_COMPOSE_MAIN_FILE=docker-compose.yml
-DOCKER_COMPOSE_DEV_FILE=docker-compose.dev.yml
-DOCKER_COMPOSE_PROD_FILE=docker-compose.prod.yml
-DOCKER_COMPOSE_TEST_FILE_NAME=docker-compose.test.yml
-
-COMPOSE_OPTION_START_AS_DEMON=up -d --build
-COMPOSE_PROFILE_DEFAULT=""--profile default""
-
 # define standard colors
 ifneq (,$(findstring xterm,${TERM}))
 	BLACK        := $(shell printf "\033[30m")
@@ -52,33 +38,12 @@ ifneq (,$(wildcard ./.env))
 	export
 endif
 
-# looking for docker-compose files
-ifeq (,$(wildcard ./${DOCKER_COMPOSE_PROD_FILE}))
-	DOCKER_COMPOSE_PROD_FILE=_
-endif
-ifeq (,$(wildcard ./${DOCKER_COMPOSE_DEV_FILE}))
-	DOCKER_COMPOSE_DEV_FILE=_
-endif
-ifeq (,$(wildcard ./${DOCKER_COMPOSE_TEST_FILE_NAME}))
-	DOCKER_COMPOSE_TEST_FILE=_
-else
-	DOCKER_COMPOSE_TEST_FILE=${DOCKER_COMPOSE_TEST_FILE_NAME}
-endif
-
 # set envs if they are not defined
 ifeq ($(PROJECT_NAME),)
 	PROJECT_NAME=$(DEFAULT_PROJECT_NAME)
 endif
 ifeq ($(DOCKER_BUILDKIT),)
 	DOCKER_BUILDKIT=1
-endif
-ifeq ($(ENVIRONMENT),)
-	ENVIRONMENT=production
-endif
-ifeq ($(ENVIRONMENT), development)
-   CURRENT_ENVIRONMENT_PREFIX=${PREFIX_DEV}
-else
-   CURRENT_ENVIRONMENT_PREFIX=${PREFIX_PROD}
 endif
 
 
@@ -133,54 +98,6 @@ check_pg:
 	$(call check_service,"Postgres",${POSTGRES_HOST},${POSTGRES_PORT})
 
 
-define run_docker_compose_for_env
-	@if [ $(strip ${2}) != "_" ]; then \
-		make run_docker_compose_for_env \
-			env=$(strip ${1}) \
-			override_file="-f ${2}" \
-			cmd=$(strip ${3}); \
-    else \
-		make run_docker_compose_for_env \
-			env=$(strip ${1}) \
-			cmd=$(strip ${3}); \
-    fi
-endef
-run_docker_compose_for_env:
-	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
-		COMPOSE_PROJECT_NAME=${PROJECT_NAME} \
-		docker compose \
-			-f ${DOCKER_COMPOSE_MAIN_FILE} \
-			$(strip ${override_file}) \
-			$(strip ${cmd})
-
-
-define run_docker_compose_for_current_env
-	@if [ ${CURRENT_ENVIRONMENT_PREFIX} = ${PREFIX_DEV} ]; then \
-		if [ "${DOCKER_COMPOSE_DEV_FILE}" != "_" ]; then \
-			make run_docker_compose_for_env \
-				env=${CURRENT_ENVIRONMENT_PREFIX} \
-				override_file="-f ${DOCKER_COMPOSE_DEV_FILE}" \
-				cmd="$(strip ${1})"; \
-		else \
-			make run_docker_compose_for_env \
-				env=${CURRENT_ENVIRONMENT_PREFIX} \
-				cmd="$(strip ${1})"; \
-		fi \
-    elif [ ${CURRENT_ENVIRONMENT_PREFIX} = ${PREFIX_PROD} ]; then \
-		if [ "${DOCKER_COMPOSE_PROD_FILE}" != "_" ]; then \
-			make run_docker_compose_for_env \
-				env=${CURRENT_ENVIRONMENT_PREFIX} \
-				override_file="-f ${DOCKER_COMPOSE_PROD_FILE}" \
-				cmd="$(strip ${1})"; \
-		else \
-			make run_docker_compose_for_env \
-				env=${CURRENT_ENVIRONMENT_PREFIX} \
-				cmd="$(strip ${1})"; \
-		fi \
-    fi
-endef
-
-
 # remove all existing containers, volumes, images
 .PHONY: remove
 remove:
@@ -219,41 +136,30 @@ build-profile:
 
 
 # stop and remove all running containers
-.PHONY: down down-prod down-dev down-test
+.PHONY: down
 down:
-	$(call log, Down containers (${RED}${CURRENT_ENVIRONMENT_PREFIX}${INFO})${RESET})
-	@make down-prod
-	@make down-dev
-	@make down-test
-down-prod:
-	$(call run_docker_compose_for_env, "${PREFIX_PROD}", "${DOCKER_COMPOSE_PROD_FILE}", "${COMPOSE_PROFILE_DEFAULT} down")
-	$(call run_docker_compose_for_env, "_", "${DOCKER_COMPOSE_PROD_FILE}", "${COMPOSE_PROFILE_DEFAULT} down")
-down-dev:
-	$(call run_docker_compose_for_env, "${PREFIX_DEV}", "${DOCKER_COMPOSE_DEV_FILE}", "${COMPOSE_PROFILE_DEFAULT} down")
-	$(call run_docker_compose_for_env, "_", "${DOCKER_COMPOSE_DEV_FILE}", "${COMPOSE_PROFILE_DEFAULT} down")
-down-test:
-	$(call run_docker_compose_for_env, "${PREFIX_TEST}", "${DOCKER_COMPOSE_TEST_FILE}", "${COMPOSE_PROFILE_DEFAULT} --profile tests down")
-
+	$(call log, Down containers)
+	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} COMPOSE_PROJECT_NAME=${PROJECT_NAME} docker-compose --profile default down
+	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} COMPOSE_PROJECT_NAME=${PROJECT_NAME} docker-compose --profile grafana down
 
 # build and run docker containers in demon mode
 .PHONY: run
 run: down
-	$(call log, Run containers (${RED}${CURRENT_ENVIRONMENT_PREFIX}${INFO})${RESET})
-	$(call run_docker_compose_for_current_env, --profile default ${COMPOSE_OPTION_START_AS_DEMON} ${s})
+	$(call log, Run containers)
+	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} COMPOSE_PROJECT_NAME=${PROJECT_NAME} docker-compose --profile default up -d --build
 
 
-# down running containers, then build and run docker containers in demon mode for db profile
-.PHONY: run-db
-run-db: down
-	$(call log, Run containers for db profile (${CURRENT_ENVIRONMENT_PREFIX}))
-	$(call run_docker_compose_for_current_env, --profile db ${COMPOSE_OPTION_START_AS_DEMON} ${s})
+.PHONY: rung
+rung: down
+	$(call log, Run only containers for profile 'grafana')
+	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} COMPOSE_PROJECT_NAME=${PROJECT_NAME} docker-compose --profile grafana up -d --build
 
 
 # run docker containers in demon mode
 .PHONY: up
 up:
-	$(call log, Run containers (${RED}${CURRENT_ENVIRONMENT_PREFIX}${INFO})${RESET})
-	$(call run_docker_compose_for_current_env, --profile default up -d --build)
+	$(call log, Run docker containers in demon mode)
+	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} COMPOSE_PROJECT_NAME=${PROJECT_NAME} docker-compose --profile default up -d --build
 
 
 # show service's logs (e.g.: make logs s=proxy)

@@ -1,3 +1,5 @@
-2024-03-03T09:36:49,804 | CRITICAL  | Camel (active-edo_2171) thread #556 - JmsConsumer[soap-connector-edo_2171] | aggregation                      | 151 - org.apache.camel.camel-core - 2.23.2 | ! aggregation !
-2024-03-03T09:36:56,562 | ERROR  | Camel (active-edo_2171) thread #556 - JmsConsumer[soap-connector-edo_2171] | aggregation                      | 151 - org.apache.camel.camel-core - 2.23.2 | ! aggregation !
-2024-03-03T09:37:43,671 | INFO  | Camel (active-edo_2171) thread #556 - JmsConsumer[soap-connector-edo_2171] | aggregation                      | 151 - org.apache.camel.camel-core - 2.23.2 | ! aggregation !
+2024-03-03T14:15:26,863 | WARN | Camel (active-edo_2171) thread #556 - JmsConsumer[soap-connector-edo_2171]default-workqueue-21 | RESP_out | 151 - org.apache.camel.camel-core - 2.23.2 | aggregation 
+Address: http://yandex
+2024-03-03T14:15:28,868 | INFO | qtp1508132334-55303 | REQ_IN | 151 - org.apache.camel.camel-core - 2.23.2 | REQ_IN 
+Address: http://yandex/google/ws/esbExchange.1cws
+    HttpMethod: POST

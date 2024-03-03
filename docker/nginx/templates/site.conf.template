@@ -1,0 +1,46 @@
+upstream grafana_upstream {
+  server ${GRAFANA_HOST}:${GRAFANA_PORT};
+}
+
+upstream loki_upstream {
+  server ${LOKI_HOST}:${LOKI_PORT};
+}
+
+upstream supervisor_upstream {
+  server ${SUPERVISOR_HOST}:${SUPERVISOR_PORT};
+}
+
+server {
+    listen       ${PROXY_LISTEN_PORT_GRAFANA} default_server;
+    listen       [::]:${PROXY_LISTEN_PORT_GRAFANA} default_server;
+    server_name  _;
+
+    location / {
+        proxy_pass http://grafana_upstream;
+
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+}
+
+server {
+    listen       ${PROXY_LISTEN_PORT_LOKI} default_server;
+    listen       [::]:${PROXY_LISTEN_PORT_LOKI} default_server;
+    server_name  _;
+
+    location / {
+        proxy_pass http://loki_upstream;
+    }
+}
+
+server {
+    listen       ${PROXY_LISTEN_PORT_SUPERVISOR} default_server;
+    listen       [::]:${PROXY_LISTEN_PORT_SUPERVISOR} default_server;
+    server_name  _;
+
+    location / {
+        proxy_pass http://supervisor_upstream;
+    }
+}
+
