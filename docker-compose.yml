@@ -1,6 +1,6 @@
 x-base-service: &base-service
     platform: ${DOCKER_IMG_PLATFORM:-linux/amd64}
-    restart: no
+    restart: "no"
     profiles:
         - default
 
