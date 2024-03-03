@@ -26,7 +26,7 @@ template = "{date} | {lvl} | {component} | {action_type_1} | 151 - org.apache.ca
 
 
 def add_record():
-    with open('karaf-logs/karaf-01(5).log', 'a') as config_file:
+    with open('karaf-logs/karaf-01(2).log', 'a') as config_file:
         date = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S,%f')[:-3]
         lvl = lvls[random.randint(0, len(lvls)-1)]
         action_type_1 = action_types[random.randint(0, len(action_types) - 1)]

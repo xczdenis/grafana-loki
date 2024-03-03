@@ -390,4 +390,4 @@ state.json
 celerybeat-schedule.db
 local/
 .local/
-!karaf-logs/*.log
+!karaf-logs/example.log
