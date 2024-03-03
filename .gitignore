@@ -1,16 +1,3 @@
-*.sqlite
-.DS_Store
-.DS_Store/
-staticfiles/
-
-site
-.env.local
-.DS_Storemain
-state.json
-celerybeat-schedule.db
-local/
-.local/
-
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,jetbrains+all,python,django,virtualenv,venv,dotenv,direnv
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,jetbrains+all,python,django,virtualenv,venv,dotenv,direnv
 
@@ -390,3 +377,17 @@ fabric.properties
 *.code-workspace
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,jetbrains+all,python,django,virtualenv,venv,dotenv,direnv
+
+*.sqlite
+.DS_Store
+.DS_Store/
+staticfiles/
+
+site
+.env.local
+.DS_Storemain
+state.json
+celerybeat-schedule.db
+local/
+.local/
+!karaf-logs/*.log

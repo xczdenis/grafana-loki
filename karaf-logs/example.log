@@ -1,0 +1,36 @@
+2024-03-01T18:06:00,671 | WINFO  | Camel (active-edo_2171) thread #557 - JmsConsumer[soap-connector-edo_2171] | aggregation                      | 151 - org.apache.camel.camel-core - 2.23.2 | ! aggregation !
+2024-03-01T18:06:00,673 | ERROR  | Camel (active-edo_2171) thread #555 - JmsConsumer[soap-connector-edo_2171] | REQ_OUT                          | 192 - org.apache.cxf.cxf-rt-features-logging - 3.2.7 | REQ_OUT
+    Address: http://ocrv-dev-app-01.ocrv.com.rzd/vkedo_dev2/ws/esbExchange.1cws
+    HttpMethod: POST
+    Content-Type: application/soap+xml; action="http://www.1c-esb.ru/connector/universal/system/1.0#esbExchange:PutPackets"
+    ExchangeId: ddb603c9-df68-43c0-a70e-b2ff66ab10dc
+    ServiceName: esbExchange
+    PortName: esbExchangeSoap12
+    PortTypeName: esbExchangePortType
+
+2024-03-01T18:06:00,687 | WARN  | Camel (active-edo_2171) thread #557 - JmsConsumer[soap-connector-edo_2171] | REQ_OUT                          | 192 - org.apache.cxf.cxf-rt-features-logging - 3.2.7 | REQ_OUT
+    Address: http://ocrv-dev-app-01.ocrv.com.rzd/vkedo_dev2/ws/esbExchange.1cws
+    HttpMethod: POST
+    Content-Type: application/soap+xml; action="http://www.1c-esb.ru/connector/universal/system/1.0#esbExchange:PutPackets"
+    ExchangeId: cf6f28d5-2403-4264-b6fd-df16ff750d5a
+    ServiceName: esbExchange
+    PortName: esbExchangeSoap12
+    PortTypeName: esbExchangePortType
+
+2024-03-01T18:06:00,691 | INFO  | Camel (active-edo_2171) thread #556 - JmsConsumer[soap-connector-edo_2171] | aggregation                      | 151 - org.apache.camel.camel-core - 2.23.2 | ! aggregation !
+2024-03-01T18:06:00,702 | WARN  | Camel (active-edo_2171) thread #556 - JmsConsumer[soap-connector-edo_2171] | REQ_OUT                          | 192 - org.apache.cxf.cxf-rt-features-logging - 3.2.7 | REQ_OUT
+    Address: http://ocrv-dev-app-01.ocrv.com.rzd/vkedo_dev2/ws/esbExchange.1cws
+    HttpMethod: POST
+    Content-Type: application/soap+xml; action="http://www.1c-esb.ru/connector/universal/system/1.0#esbExchange:PutPackets"
+    ExchangeId: 614abc66-6e8d-4758-be59-ee3a77428a94
+    ServiceName: esbExchange
+    PortName: esbExchangeSoap12
+    PortTypeName: esbExchangePortType
+    Headers: {Authorization=Basic d2ViX3VzZXI6MTIzNDU2Nzg=, Accept=*/*}
+    Payload: <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope"><soap:Body><op:PutPackets xmlns="http://www.1c-esb.ru/ExchangeTypes/1.0" xmlns:op="http://www.1c-esb.ru/connector/universal/system/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <packets>
+2024-03-01T19:04:10,691 | INF-04  | Camel (active-edo_2171) thread #556 - JmsConsumer[soap-connector-edo_2171] | aggregation                      | 151 - org.apache.camel.camel-core - 2.23.2 | ! aggregation !
+2024-03-01T19:04:10,691 | INF-04  | Camel (active-edo_2171) thread #556 - JmsConsumer[soap-connector-edo_2171] | aggregation                      | 151 - org.apache.camel.camel-core - 2.23.2 | ! aggregation !
+2024-03-01T19:04:10,691 | INF-04  | Camel (active-edo_2171) thread #556 - JmsConsumer[soap-connector-edo_2171] | aggregation                      | 151 - org.apache.camel.camel-core - 2.23.2 | ! aggregation !
+2024-03-01T19:04:10,691 | INFO  | Camel (active-edo_2171) thread #556 - JmsConsumer[soap-connector-edo_2171] | aggregation                      | 151 - org.apache.camel.camel-core - 2.23.2 | ! aggregation !
+2024-03-01 20:23:17,477 | WARNING  | Camel (active-edo_2171) thread #556 - JmsConsumer[soap-connector-edo_2171] | aggregation                      | 151 - org.apache.camel.camel-core - 2.23.2 | ! aggregation !

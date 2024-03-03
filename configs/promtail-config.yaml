@@ -9,19 +9,19 @@ clients:
   - url: http://loki:3100/loki/api/v1/push
 
 scrape_configs:
-  - job_name: system
+  - job_name: karaf-logs
     static_configs:
       - targets:
           - karaf-logs
         labels:
           job: karaf-logs
-          __path__: /var/karaf-logs/*log
+          __path__: /var/karaf-logs/karaf*.log
     pipeline_stages:
       - match:
           selector: '{job="karaf-logs"}'
           stages:
             - multiline:
-                firstline: '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}'
+                firstline: '^\d{4}-\d{2}-\d{2}[\sT]\d{2}:\d{2}:\d{2},\d{3}'
                 max_lines: 128
                 max_wait_time: 3s
             - regex:
@@ -29,6 +29,7 @@ scrape_configs:
             - timestamp:
                 format: 2006-01-02T15:04:05,000
                 source: time
+                location: Europe/Moscow
             - regex:
                 expression: '(?P<xml_status>[0-9]*)<\/status>'
             - regex:
@@ -47,8 +48,5 @@ scrape_configs:
                 response_code:
                 message_uuid:
                 destination:
-            - labels:
-                log_level:
-                time:
 
 #promtail --dry-run --inspect --config.file=/etc/promtail/promtail-config.yml

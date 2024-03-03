@@ -32,7 +32,7 @@ common:
 # 01.03.2024 10:00:00 лог 1 - не будет выведен т.к. 10+3=13, 13:00 - это уже в будущем по
 #                                сравнению с 12:00. Будет ошибка has timestamp too new: 2024-03-01T10:00:00Z
 ingester:
-  max_chunk_age: 4h
+  max_chunk_age: 2h
 
 schema_config:
   configs:

@@ -1,0 +1,3 @@
+2024-03-03T09:36:49,804 | CRITICAL  | Camel (active-edo_2171) thread #556 - JmsConsumer[soap-connector-edo_2171] | aggregation                      | 151 - org.apache.camel.camel-core - 2.23.2 | ! aggregation !
+2024-03-03T09:36:56,562 | ERROR  | Camel (active-edo_2171) thread #556 - JmsConsumer[soap-connector-edo_2171] | aggregation                      | 151 - org.apache.camel.camel-core - 2.23.2 | ! aggregation !
+2024-03-03T09:37:43,671 | INFO  | Camel (active-edo_2171) thread #556 - JmsConsumer[soap-connector-edo_2171] | aggregation                      | 151 - org.apache.camel.camel-core - 2.23.2 | ! aggregation !
