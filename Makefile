@@ -1,4 +1,6 @@
 DEFAULT_PROJECT_NAME=grafana-loki
+COMPOSE_PROFILE_DEFAULT=""--profile default""
+COMPOSE_PROFILE_GRAFANA=""--profile grafana""
 
 # define standard colors
 ifneq (,$(findstring xterm,${TERM}))
@@ -52,6 +54,11 @@ define log
 	@echo "${WHITE}----------------------------------------${RESET}"
 	@echo "${BLUE}$(strip ${1})${RESET}"
 	@echo "${WHITE}----------------------------------------${RESET}"
+endef
+
+
+define run_docker_compose
+	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} COMPOSE_PROJECT_NAME=${PROJECT_NAME} docker-compose $(strip ${1})
 endef
 
 
@@ -128,38 +135,39 @@ env:
 # build all docker images
 .PHONY: build build-profile
 build:
-	$(call log, Build all images (${RED}${CURRENT_ENVIRONMENT_PREFIX}${INFO})${RESET})
-	$(call run_docker_compose_for_current_env, --profile default build)
+	$(call log, Build all images)
+	$(call run_docker_compose, ${COMPOSE_PROFILE_DEFAULT} build)
+	$(call run_docker_compose, ${COMPOSE_PROFILE_GRAFANA} build)
 build-profile:
-	$(call log, Build images for profile ${p} (${RED}${CURRENT_ENVIRONMENT_PREFIX}${INFO})${RESET})
-	$(call run_docker_compose_for_current_env, --profile ${p} build)
+	$(call log, Build images for profile ${PINK}${p}${RESET})
+	$(call run_docker_compose, --profile ${p} build)
 
 
 # stop and remove all running containers
 .PHONY: down
 down:
 	$(call log, Down containers)
-	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} COMPOSE_PROJECT_NAME=${PROJECT_NAME} docker-compose --profile default down
-	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} COMPOSE_PROJECT_NAME=${PROJECT_NAME} docker-compose --profile grafana down
+	$(call run_docker_compose, ${COMPOSE_PROFILE_DEFAULT} down)
+	$(call run_docker_compose, ${COMPOSE_PROFILE_GRAFANA} down)
 
 # build and run docker containers in demon mode
 .PHONY: run
 run: down
 	$(call log, Run containers)
-	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} COMPOSE_PROJECT_NAME=${PROJECT_NAME} docker-compose --profile default up -d --build
+	$(call run_docker_compose, ${COMPOSE_PROFILE_DEFAULT} up -d --build)
 
 
 .PHONY: rung
 rung: down
-	$(call log, Run only containers for profile 'grafana')
-	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} COMPOSE_PROJECT_NAME=${PROJECT_NAME} docker-compose --profile grafana up -d --build
+	$(call log, Run only containers for profile ${PINK}grafana${RESET})
+	$(call run_docker_compose, ${COMPOSE_PROFILE_GRAFANA} up -d --build)
 
 
 # run docker containers in demon mode
 .PHONY: up
 up:
-	$(call log, Run docker containers in demon mode)
-	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} COMPOSE_PROJECT_NAME=${PROJECT_NAME} docker-compose --profile default up -d --build
+	$(call log, Run docker containers in daemon mode)
+	$(call run_docker_compose, ${COMPOSE_PROFILE_DEFAULT} up -d --build)
 
 
 # show service's logs (e.g.: make logs s=proxy)
@@ -172,7 +180,7 @@ logs:
 	    make _logs s="${s}"; \
 	fi
 _logs:
-	$(call run_docker_compose_for_current_env, logs -f ${s})
+	$(call run_docker_compose, logs -f ${s})
 
 
 # run bash into container
@@ -185,7 +193,7 @@ bash:
 	    make _bash s="${s}"; \
 	fi
 _bash:
-	$(call run_docker_compose_for_current_env, exec -it ${s} bash)
+	$(call run_docker_compose, exec -it ${s} bash)
 
 
 # run sh into container (e.g. for Redis)
@@ -198,24 +206,25 @@ sh:
 	    make _sh s="${s}"; \
 	fi
 _sh:
-	$(call run_docker_compose_for_current_env, exec -it ${s} sh)
+	$(call run_docker_compose, exec -it ${s} sh)
 
 
 # stop services
 .PHONY: stop stops
 stop:
-	@read -p "(${CURRENT_ENVIRONMENT_PREFIX}) ${ORANGE}Service name (press Enter to stop all services): ${RESET}" _TAG && \
+	@read -p "${ORANGE}Service name (press Enter to stop all services): ${RESET}" _TAG && \
 	if [ "_$${_TAG}" != "_" ]; then \
 		make stops s="$${_TAG}"; \
 	else \
 	    make stopall; \
 	fi
 stops:
-	$(call log, Stop containers (${RED}${CURRENT_ENVIRONMENT_PREFIX}${INFO})${RESET})
-	$(call run_docker_compose_for_current_env, --profile default stop ${s})
+	$(call log, Stop container)
+	$(call run_docker_compose, ${COMPOSE_PROFILE_DEFAULT} stop ${s})
 stopall:
-	$(call log, Stop containers (${RED}${CURRENT_ENVIRONMENT_PREFIX}${INFO})${RESET})
-	$(call run_docker_compose_for_current_env, --profile default stop)
+	$(call log, Stop all containers)
+	$(call run_docker_compose, ${COMPOSE_PROFILE_DEFAULT} stop)
+	$(call run_docker_compose, ${COMPOSE_PROFILE_GRAFANA} stop)
 
 
 # start services (e.g.: start s=redis)
@@ -228,15 +237,15 @@ start:
 	    make _start s="${s}"; \
 	fi
 _start:
-	$(call run_docker_compose_for_current_env, --profile default start ${s})
+	$(call run_docker_compose, ${COMPOSE_PROFILE_DEFAULT} start ${s})
 
 
 # show docker-compose status
 .PHONY: status status-all
 status:
-	$(call run_docker_compose_for_current_env, ps)
+	$(call run_docker_compose, ps)
 status-all:
-	$(call run_docker_compose_for_current_env, ps -a)
+	$(call run_docker_compose, ps -a)
 
 
 # remove all stopped containers/unused images/unused volumes/unused networks
@@ -291,5 +300,5 @@ prune-n:
 # show docker-compose configuration
 .PHONY: config
 config:
-	$(call log, Docker-compose configuration (${RED}${CURRENT_ENVIRONMENT_PREFIX}${INFO})${RESET})
-	$(call run_docker_compose_for_current_env, ${COMPOSE_PROFILE_DEFAULT} config)
+	$(call log, Docker-compose configuration)
+	$(call run_docker_compose, ${COMPOSE_PROFILE_DEFAULT} config)
