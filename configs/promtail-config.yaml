@@ -15,7 +15,7 @@ scrape_configs:
           - karaf-logs
         labels:
           job: karaf-logs
-          __path__: /var/karaf-logs/karaf*.log
+          __path__: /var/karaf-logs/karaf*.log*
     pipeline_stages:
       - match:
           selector: '{job="karaf-logs"}'
