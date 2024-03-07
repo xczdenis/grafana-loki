@@ -1,0 +1,10 @@
+Content-Type: text/xml
+    ResponseCode: 500
+    ExchangeId: 19e56495-ea17-49c1-8c52-ad0ba3988b96
+    ServiceName: esbExchange
+    PortName: esbExchangeSOAP
+    PortTypeName: esbExchange
+    Headers: {Authorization=Basic ZWRvXzIxNzFfbmV3OmFkbWlu, SOAPAction=http://www.1c-esb.ru/connector/universal/system/1.0/PutPackets, Accept=*/*, breadcrumbId=ID-ocrv-asufr3-store-1708178534908-12-37538642, X-SystemUuid=8677875a-d497-11ee-8a1e-00155d72f316, User-Agent=1C+Enterprise/8.3, X-Forwarded-Proto=http, Host=172.22.154.182, X-SystemName=edo_2171_new, X-Real-IP=172.22.10.65, X-ForwardedUser=edo_2171_new, X-ForwardedUserId=29}
+    Payload: <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><response xmlns="http://www.1c-esb.ru/ExchangeTypes/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <status>500</status>
+</response></soap:Body></soap:Envelope>

@@ -1,44 +1,67 @@
-import datetime
+import logging
+import os
 import random
 import time
+from logging.handlers import RotatingFileHandler
 
-components = (
-    'qtp1508132334-55303',
-    'qtp1508132334',
-    'Camel (soap-passive-connector-context) thread #99 - Aggregator',
-    'Camel (active-edo_2171) thread #556 - JmsConsumer[soap-connector-edo_2171]'
-    'default-workqueue-21',
-)
-lvls = ('INFO', 'WARN', 'ERROR', 'CRITICAL')
-action_types = ('aggregation', 'REQ_IN', 'REQ_OUT', 'RESP_IN', 'RESP_out')
-msg1 = """\nAddress: http://yandex/google/ws/esbExchange.1cws
-    HttpMethod: POST
-    Content-Type: application/soap+xml; action="http://www.1c-esb.ru/connector/universal/system/1.0#esbExchange:PutPackets"
-    ExchangeId: ddb603c9-df68-43c0-a70e-b2ff66ab10dc
-    ServiceName: esbExchange"""
-msg2 = ""
-msg3 = """\nAddress: http://yandex/google/ws/esbExchange.1cws
-    HttpMethod: POST"""
-msg4 = "\nAddress: http://yandex"
-messages = (msg1, msg2, msg3, msg4)
-
-template = "{date} | {lvl} | {component} | {action_type_1} | 151 - org.apache.camel.camel-core - 2.23.2 | {action_type_2} {msg}"
+from fake import fake_log_message
 
 
-def add_record():
-    with open('karaf-logs/karaf-01(2).log', 'a') as config_file:
-        date = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S,%f')[:-3]
-        lvl = lvls[random.randint(0, len(lvls)-1)]
-        action_type_1 = action_types[random.randint(0, len(action_types) - 1)]
-        action_type_2 = action_types[random.randint(0, len(action_types) - 1)]
-        msg = messages[random.randint(0, len(messages) - 1)]
-        component = components[random.randint(0, len(components) - 1)]
-        s = template.format(date=date, lvl=lvl, component=component, action_type_1=action_type_1, action_type_2=action_type_2, msg=msg)
-        config_file.write(s)
-        config_file.write('\n')
+class CustomFormatter(logging.Formatter):
+    def formatTime(self, record, datefmt=None):
+        ct = self.converter(record.created)
+        if datefmt:
+            t = time.strftime(datefmt, ct)
+            s = "%s,%03d" % (t, record.msecs)
+        else:
+            s = time.strftime("%Y-%m-%dT%H:%M:%S", ct)
+            s = "%s,%03d" % (s, record.msecs)
+        return s
 
 
-if __name__ == '__main__':
+def setup_logging(log_path, max_size_bytes, backup_count):
+    if not os.path.isdir(os.path.dirname(log_path)):
+        os.makedirs(os.path.dirname(log_path), exist_ok=True)
+
+    logger = logging.getLogger("MyLogger")
+    logger.setLevel(logging.DEBUG)
+
+    handler = RotatingFileHandler(
+        log_path, maxBytes=max_size_bytes, backupCount=backup_count
+    )
+    logger.addHandler(handler)
+
+    formatter = CustomFormatter("%(asctime)s %(message)s")
+    handler.setFormatter(formatter)
+
+    return logger
+
+
+def get_delay(speed: int):
+    if speed == 0:
+        return 0
+    elif speed == 1:
+        return 1 / random.randint(1, 300)
+    elif speed == 2:
+        return 1 / random.randint(300, 500)
+    elif speed == 3:
+        return 1 / random.randint(500, 1000)
+    else:
+        return 1 / random.randint(2000, 3000)
+
+
+log_path = "karaf-logs/karaf.log"
+max_size_bytes = 2 * 1024 * 1024  # в мегабайтах
+backup_count = 10
+speed = 4  # скорость, с которой растер размер файла (от 0 - выполнить 1 итерацию, до 4 - максимально быстро)
+
+logger = setup_logging(log_path, max_size_bytes, backup_count)
+delay = get_delay(speed)
+
+if __name__ == "__main__":
     while True:
-        add_record()
-        time.sleep(2)
+        logger.info(fake_log_message())
+        if delay > 0:
+            time.sleep(delay)
+        else:
+            break

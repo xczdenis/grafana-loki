@@ -1,0 +1,61 @@
+    Address: http://yandex.com/my-db-name/ws/esbExchange.1cws
+    HttpMethod: POST
+    Content-Type: application/soap+xml; action="http://www.1c-esb.ru/connector/universal/system/1.0#esbExchange:PutPackets"
+    ExchangeId: 1cc5ae8a-340d-4056-b49e-cfb01f55b9e6
+    ServiceName: esbExchange
+    PortName: esbExchangeSoap12
+    PortTypeName: esbExchangePortType
+    Headers: {Authorization=Basic d2ViX3VzZXI6MTIzNDU2Nzg=, Accept=*/*}
+    Payload: <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope"><soap:Body><op:PutPackets xmlns="http://www.1c-esb.ru/ExchangeTypes/1.0" xmlns:op="http://www.1c-esb.ru/connector/universal/system/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <packets>
+      <packet xmlns:soap="http://www.1c-esb.ru/ExchangeTypes/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+         <header>
+            <transportUUID>09e70c47-4b3f-4c38-a0bf-d35a4f6fb54e</transportUUID>
+            <destination>
+               <id>57562396-bab1-11ee-920b-00155d72f316</id>
+               <type>system.uuid</type>
+            </destination>
+         </header>
+         <message>
+            <messageUUID>7297efa2-d148-451c-8c16-348a9a433698</messageUUID>
+            <messageType>ВыгрузкаДанныхКаноническийФормат</messageType>
+            <source>
+               <id>8677875a-d497-11ee-8a1e-00155d72f316</id>
+               <type>system.uuid</type>
+            </source>
+            <contentType>application/xml</contentType>
+            <content>&lt;?xml version="1.0"?>
+&lt;Message xmlns:msg="http://www.1c.ru/SSL/Exchange/Message" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	&lt;Header xmlns="http://1c-esb.ru/esb/1.0">
+		&lt;Format>http://1c-esb.ru/esb/1.0&lt;/Format>
+		&lt;CreationDate>2024-02-29T12:39:57&lt;/CreationDate>
+		&lt;AvailableVersion>1&lt;/AvailableVersion>
+	&lt;/Header>
+	&lt;Body xmlns="http://1c-esb.ru/esb/1.0">
+		&lt;НаборЗаписей.Set_Ed_StatusMessage>
+			&lt;КлючевыеСвойства>
+				&lt;GUID>7297efa2-d148-451c-8c16-348a9a433698&lt;/GUID>
+			&lt;/КлючевыеСвойства>
+			&lt;Content>&amp;lt;![CDATA[&amp;lt;Z00sEdoServiceInc xmlns="urn:sap-com:document:sap:soap:functions:mc-style" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Z00sEdoServiceInc"&amp;gt;
+	&amp;lt;System xmlns=""&amp;gt;1S_DO&amp;lt;/System&amp;gt;
+	&amp;lt;Method xmlns=""&amp;gt;SET_ED_STATUS&amp;lt;/Method&amp;gt;
+	&amp;lt;Xml xmlns=""&amp;gt;77u/PEZpbGU+DQoJPERvY0luZm8gR1VJRF9TQVA9IjY1M0ExQzc1MUJFNjUwRTBF
+MTAwNDUwMDBBRjgyMjI2Ij4NCgkJPEhFQUQgTE9HSU5fU0FQPSIiIExPR0lOXzFT
+PSLQpNC40YDRgdC+0LLQodCRIiBTVEFUX0RBVEU9IjIwMjQtMDItMjciIFNUQVRf
+VElNRT0iMTA6MjU6MzMiIERBVEU9IiIgVEVYVD0iIiBDQVNFX0lEPSIiIFNUQVRV
+U19URVhUPSLQn9C+0LTQv9C40YHQsNC9INC/0YDQtdC00YHQtdC00LDRgtC10LvQ
+tdC8INC60L7QvNC40YHRgdC40LgiIFNUQVRVUz0iUzA0NyIgR1VJRF8xUz0iZTY3
+NWY0NWEtZDQ5OS0xMWVlLThhMWUtMDAxNTVkNzJmMzE2Ii8+DQoJCTxGSUxFUz4N
+CgkJCTxGaWxlSW5mbyBEQVRBPSIiIElEX1JFRj0iIiBOQU1FPSJUSVRVTFJVSzY1
+M0ExQzc1LTFCRTYtNTBFMC1FMTAwLTgwMDAwQUY4MjI5NyIgVFlQRT0iWE1MIiBJ
+RD0iZTg4ZWZjMzItZDQ5OS0xMWVlLThhMWUtMDAxNTVkNzJmMzE2Ii8+DQoJCTwv
+RklMRVM+DQoJCTxJTkZPPg0KCQkJPFRleHRJbmZvIFZBTFVFPSIiIElEPSIiLz4N
+CgkJPC9JTkZPPg0KCTwvRG9jSW5mbz4NCjwvRmlsZT4=&amp;lt;/Xml&amp;gt;
+&amp;lt;/Z00sEdoServiceInc&amp;gt;]]&amp;gt;&lt;/Content>
+		&lt;/НаборЗаписей.Set_Ed_StatusMessage>
+	&lt;/Body>
+&lt;/Message></content>
+         </message>
+      </packet>
+   </packets>
+</op:PutPackets></soap:Body></soap:Envelope>

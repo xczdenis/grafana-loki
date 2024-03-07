@@ -25,7 +25,7 @@ scrape_configs:
                 max_lines: 128
                 max_wait_time: 3s
             - regex:
-                expression: '^(?P<time>.*)\s+\|\s+(?P<log_level>\w+)\s+\|\s+(?P<thread_id>[^\|]+)\s+\|\s+(?P<action_type1>[^\|\s]+)\s+\|\s+(?P<component>[^\|]+)\s+\|\s+(?P<action_type2>[^\n]+)(?:\n(?P<msg>.*))?'
+                expression: '^(?P<time>.+?)\s+\|\s+(?P<log_level>\w+)'
             - timestamp:
                 format: 2006-01-02T15:04:05,000
                 source: time
@@ -34,19 +34,11 @@ scrape_configs:
                 expression: '(?P<xml_status>[0-9]*)<\/status>'
             - regex:
                 expression: 'ResponseCode:\s(?P<response_code>[0-9]*)'
-            - regex:
-                expression: '(?:<messageUUID>|SOAPJMS_HEADER_MessageUUID=|<transportUUID>|Receive message |Отправлен )(?P<message_uuid>[\w-]+)'
-            - regex:
-                expression: '(?:<destination>\s*<id>|DESTINATION_SYSTEM_UUID=|for\s|Destination=)(?P<destination>[\w-]+)'
             - labels:
                 log_level:
-                thread_id:
-                action_type1:
-                component:
-                action_type2:
                 xml_status:
                 response_code:
-                message_uuid:
-                destination:
+            - labeldrop:
+                - time
 
 #promtail --dry-run --inspect --config.file=/etc/promtail/promtail-config.yml

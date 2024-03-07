@@ -378,6 +378,7 @@ fabric.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,jetbrains+all,python,django,virtualenv,venv,dotenv,direnv
 
+*.log.*
 *.sqlite
 .DS_Store
 .DS_Store/

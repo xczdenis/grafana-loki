@@ -1,0 +1,16 @@
+esbExchange#{http://www.1c-esb.ru/connector/universal/system/1.0}PutPackets has thrown exception, unwinding now
+org.apache.cxf.interceptor.Fault: Response was of unexpected text/html ContentType.  Incoming portion of HTML stream: <html>
+<head><title> A server error occurred. </title></head>
+<h1> Сервис не найден.  </h1>
+<hr/>
+An error occurred processing this request.</html>
+	at org.apache.cxf.interceptor.StaxInInterceptor.handleMessage(StaxInInterceptor.java:96) ~[184:org.apache.cxf.cxf-core:3.2.7]
+	at org.apache.cxf.phase.PhaseInterceptorChain.doIntercept(PhaseInterceptorChain.java:308) [184:org.apache.cxf.cxf-core:3.2.7]
+	at org.apache.cxf.endpoint.ClientImpl.onMessage(ClientImpl.java:805) [184:org.apache.cxf.cxf-core:3.2.7]
+	at org.apache.cxf.transport.http.HTTPConduit$WrappedOutputStream.handleResponseInternal(HTTPConduit.java:1695) [208:org.apache.cxf.cxf-rt-transports-http:3.2.7]
+	at org.apache.cxf.transport.http.HTTPConduit$WrappedOutputStream$1.run(HTTPConduit.java:1194) [208:org.apache.cxf.cxf-rt-transports-http:3.2.7]
+	at org.apache.cxf.workqueue.AutomaticWorkQueueImpl$3.run(AutomaticWorkQueueImpl.java:421) [184:org.apache.cxf.cxf-core:3.2.7]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [?:?]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [?:?]
+	at org.apache.cxf.workqueue.AutomaticWorkQueueImpl$AWQThreadFactory$1.run(AutomaticWorkQueueImpl.java:346) [184:org.apache.cxf.cxf-core:3.2.7]
+	at java.lang.Thread.run(Thread.java:750) [?:?]

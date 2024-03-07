@@ -80,6 +80,10 @@ info:
 	$(call log, INFORMATION)
 	@echo "PROJECT_NAME        = ${INFO}${PROJECT_NAME}${RESET}"
 	@echo "DOCKER_IMG_PLATFORM = ${INFO}${DOCKER_IMG_PLATFORM}${RESET}"
+	@echo "PROXY_LISTEN_PORT_GRAFANA = ${INFO}${PROXY_LISTEN_PORT_GRAFANA}${RESET}"
+	@echo "PROXY_LISTEN_PORT_LOKI = ${INFO}${PROXY_LISTEN_PORT_LOKI}${RESET}"
+	@echo "PROXY_LISTEN_PORT_SUPERVISOR = ${INFO}${PROXY_LISTEN_PORT_SUPERVISOR}${RESET}"
+	@echo "LOG_FOLDER = ${INFO}${LOG_FOLDER}${RESET}"
 
 
 # display info about running docker containers, images, volumes
@@ -300,3 +304,8 @@ prune-n:
 config:
 	$(call log, Docker-compose configuration)
 	$(call run_docker_compose, ${COMPOSE_PROFILE_DEFAULT} config)
+
+
+.PHONY: make-logs
+make-logs:
+	python3 make_logs.py

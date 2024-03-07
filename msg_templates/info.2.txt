@@ -1,0 +1,12 @@
+    Content-Type: text/html; charset=utf-8
+    ResponseCode: 500
+    ExchangeId: 36b7a9a3-c606-45eb-9228-6046002980d7
+    ServiceName: esbExchange
+    PortName: esbExchangeSoap12
+    PortTypeName: esbExchangePortType
+    Headers: {Server=Apache/2.4.54 (RED OS), connection=close, content-type=text/html; charset=utf-8, Content-Length=165, Date=Mon, 04 Mar 2024 14:01:26 GMT}
+    Payload: <html>
+<head><title> A server error occurred. </title></head>
+<h1> Сервис не найден.  </h1>
+<hr/>
+An error occurred processing this request.</html>
