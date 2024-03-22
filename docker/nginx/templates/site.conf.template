@@ -6,10 +6,6 @@ upstream loki_upstream {
   server ${LOKI_HOST}:${LOKI_PORT};
 }
 
-upstream supervisor_upstream {
-  server ${SUPERVISOR_HOST}:${SUPERVISOR_PORT};
-}
-
 server {
     listen       ${PROXY_LISTEN_PORT_GRAFANA} default_server;
     listen       [::]:${PROXY_LISTEN_PORT_GRAFANA} default_server;
@@ -33,14 +29,3 @@ server {
         proxy_pass http://loki_upstream;
     }
 }
-
-server {
-    listen       ${PROXY_LISTEN_PORT_SUPERVISOR} default_server;
-    listen       [::]:${PROXY_LISTEN_PORT_SUPERVISOR} default_server;
-    server_name  _;
-
-    location / {
-        proxy_pass http://supervisor_upstream;
-    }
-}
-

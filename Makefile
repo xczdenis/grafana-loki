@@ -82,7 +82,6 @@ info:
 	@echo "DOCKER_IMG_PLATFORM = ${INFO}${DOCKER_IMG_PLATFORM}${RESET}"
 	@echo "PROXY_LISTEN_PORT_GRAFANA = ${INFO}${PROXY_LISTEN_PORT_GRAFANA}${RESET}"
 	@echo "PROXY_LISTEN_PORT_LOKI = ${INFO}${PROXY_LISTEN_PORT_LOKI}${RESET}"
-	@echo "PROXY_LISTEN_PORT_SUPERVISOR = ${INFO}${PROXY_LISTEN_PORT_SUPERVISOR}${RESET}"
 	@echo "LOG_FOLDER = ${INFO}${LOG_FOLDER}${RESET}"
 
 
@@ -91,12 +90,16 @@ info:
 di:
 	@echo "${INFO}Running containers:${RESET}"
 	@docker ps
+	@echo
 	@echo "${INFO}All containers:${RESET}"
 	@docker ps -a
+	@echo
 	@echo "${INFO}Images:${RESET}"
 	@docker images
+	@echo
 	@echo "${INFO}Volumes:${RESET}"
 	@docker volume ls
+	@echo
 	@echo "${INFO}Networks:${RESET}"
 	@docker network ls
 

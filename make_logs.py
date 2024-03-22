@@ -51,7 +51,7 @@ def get_delay(speed: int):
 
 
 log_path = "karaf-logs/karaf.log"
-max_size_bytes = 2 * 1024 * 1024  # в мегабайтах
+max_size_bytes = 10 * 1024 * 1024  # в мегабайтах
 backup_count = 10
 speed = 4  # скорость, с которой растер размер файла (от 0 - выполнить 1 итерацию, до 4 - максимально быстро)
 

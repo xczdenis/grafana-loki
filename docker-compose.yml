@@ -17,12 +17,9 @@ services:
       GRAFANA_PORT: 3000
       LOKI_HOST: loki
       LOKI_PORT: 3100
-      SUPERVISOR_HOST: localhost
-      SUPERVISOR_PORT: 9091
     ports:
       - ${PROXY_LISTEN_PORT_GRAFANA}:${PROXY_LISTEN_PORT_GRAFANA}
       - ${PROXY_LISTEN_PORT_LOKI}:${PROXY_LISTEN_PORT_LOKI}
-      - ${PROXY_LISTEN_PORT_SUPERVISOR}:${PROXY_LISTEN_PORT_SUPERVISOR}
     depends_on:
       grafana:
         condition: service_started
